@@ -14,6 +14,21 @@ textarea.screenplay-text {
     margin: 0 auto;
 }
 
-.save-button {
-    display: block;
+#save-button {
+    width: 9rem;
+    height: 3em;
+    border-radius: 50rem;
+    border: 3px solid #daa520;
+    background: #daa52050;
+    color: #daa520;
+}
+
+#save-button:hover {
+    background: #daa520;
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+#save-button:active {
+    transform: scale(.95);
 }
