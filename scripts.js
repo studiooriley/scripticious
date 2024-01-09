@@ -50,7 +50,7 @@ function updateTooltip(formattedLine) {
   tooltip.textContent = formatClass;
   tooltip.style.display = 'block';
 
-  // Position tooltip based on cursor or selection
+  // Position tooltip based on cursor or selection 
   // ... (implementation for positioning logic)
 }
 
