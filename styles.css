@@ -3,6 +3,89 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+  }
+  
+textarea.screenplay-text {
+    display: block;
+    width: 5.5in;
+    min-height: 75vh;
+    border: 2px solid goldenrod;
+    border-radius: .5rem;
+    margin: 0 auto;
+    color: #353535;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+.dropbtn {
+    padding: 1rem 2rem;
+    border-radius: 50rem;
+    border: 3px solid #daa520;
+    background: #daa52050;
+    color: #daa520;
+    display: block;
+    position: relative; /* Allow for chevron positioning */
+  }
+  
+.dropbtn:hover {
+    background: #daa520;
+    color: #ffffff;
+    transform: scale(1.05);
+  }
+  
+.dropbtn:active {
+    transform: scale(.95);
+  }
+  
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+.dropdown input:checked ~ .dropdown-content {
+    display: block;
+  }
+
+.dropbtn .chevron {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer; /* Indicate clickability */
+  }
+  
+  
+.dropdown {
+    pointer-events: all;
+  }
+  
+.dropdown input { /* Hide the checkbox visually */
+    display: none;
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+
+.screenplay-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 textarea.screenplay-text {
@@ -14,21 +97,97 @@ textarea.screenplay-text {
     margin: 0 auto;
 }
 
-#save-button {
-    width: 9rem;
-    height: 3em;
+#save-btn {
+    padding: 1rem 2rem;
     border-radius: 50rem;
     border: 3px solid #daa520;
     background: #daa52050;
     color: #daa520;
 }
 
-#save-button:hover {
+#save-btn:hover {
     background: #daa520;
     color: #ffffff;
     transform: scale(1.05);
 }
 
-#save-button:active {
+#save-btn:active {
     transform: scale(.95);
+}
+
+/* Hide dropdown content initially */
+/* .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* Show dropdown content when checkbox is checked */
+  /* .dropdown input:checked ~ .dropdown-content {
+    display: block;
+  } */ */
+  
+  /* Style the button and chevron */
+  /* .dropbtn {
+    display: block;
+    padding: 12px 16px;
+    border: none;
+    background-color: #eee;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .dropbtn:hover {
+    background-color: #ddd;
+  }
+  
+  .dropbtn .chevron {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  /* Make the entire dropdown container clickable */
+  /* .dropdown {
+    pointer-events: all;
+  }
+
+  .dropbtn .chevron {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Allow clicks to pass through
+  }
+  
+  
+
+/* -----------------------SCREENPLAY FORMATS----------------------- */
+
+/* .slug-line {
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.action {
+    text-align: left;
+}
+
+.character-first-appearance {
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.character {
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.dialogue {
+    text-align: center;
+    max-width: 60%;
 }

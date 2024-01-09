@@ -7,9 +7,16 @@
     </head>
     <body>
         <div class="screenplay-container">
-            <textarea class="screenplay-text" id="screenplay-text">Something written here</textarea>
-            <button id="save-button">Save as PDF</button>
-          </div>
+            <textarea class="screenplay-text" id="screenplay-text" placeholder="Int. Spaceship (In outer space) — Day"></textarea>
+            <div class="dropdown" id="save-btn-dropdown">
+                <input type="checkbox"> <button id="save-pdf-btn">Save As <span class="chevron">&#9660;</span></button>
+                <div class="dropdown-content" id="save-btn-dropdown-content">
+                    <a href="#">Save as PDF (.pdf)</a>
+                    <a href="#">Save as Markdown (.md)</a>
+                    <a href="#">Save as Image (.jpg)</a>
+                </div>
+            </div>
+        </div>
 
         <script type="text/javascript" src="scripts.js"></script>
 
