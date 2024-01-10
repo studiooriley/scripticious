@@ -4,7 +4,7 @@ const saveButton = document.getElementById('save-pdf-btn');
 const chevron = document.querySelector('#save-pdf-btn .chevron');
 const screenplayTextarea = document.getElementById('screenplay-text');
 
-// Formatting presets (only class names needed)
+// Formatting presets
 const formattingPresets = [
   'slug-line',
   'action',
@@ -16,8 +16,7 @@ let currentPresetIndex = 0;
 
 function applyFormatting(currentPresetIndex, lineToFormat) {
   const lastLineBreak = lineToFormat.lastIndexOf('\n');
-  const formattedLine = `<span contenteditable="false" class="${formattingPresets[currentPresetIndex]}">${lineToFormat.substr(lastLineBreak + 1)}</span>`; // Make spans non-editable
-  return formattedLine;
+  return `<span class="${formattingPresets[currentPresetIndex]}">${lineToFormat.substr(lastLineBreak + 1)}</span>`;
 }
 
 function handleFormatting(event) {
@@ -25,43 +24,111 @@ function handleFormatting(event) {
   const selectionEnd = screenplayTextarea.selectionEnd;
   const lineToFormat = screenplayTextarea.value.substring(selectionStart, selectionEnd);
 
-  // Create a new span or format selected text
-  let formattedLine = '';
-  if (lineToFormat.length === 0) {
-    formattedLine = applyFormatting(currentPresetIndex, '\n');
-  } else {
-    formattedLine = applyFormatting(currentPresetIndex, lineToFormat);
-  }
+  const formattedLine = applyFormatting(currentPresetIndex, lineToFormat);
 
   screenplayTextarea.value = screenplayTextarea.value.substring(0, selectionStart) + formattedLine + screenplayTextarea.value.substring(selectionEnd);
-  screenplayTextarea.selectionStart = selectionStart;
+  screenplayTextarea.selectionStart = selectionStart + formattedLine.length;
   screenplayTextarea.selectionEnd = selectionStart + formattedLine.length;
 
-  // Update tooltip
   updateTooltip(formattedLine);
 
-  // Increment preset index for next toggle
   currentPresetIndex = (currentPresetIndex + 1) % formattingPresets.length;
 }
 
+// Toggle formatting on Command + Enter
+screenplayTextarea.addEventListener('keydown', (event) => {
+  if (event.metaKey && event.key === 'Enter') {
+    handleFormatting(event);
+  }
+});
+
+// End formatting on regular Enter press
+screenplayTextarea.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') {
+    const valueWithoutSpans = screenplayTextarea.value.replace(/<span[^>]*>([^<]*)<\/span>/g, '$1');
+    screenplayTextarea.value = valueWithoutSpans;
+    currentPresetIndex = 0;
+  }
+});
+
+// Update visual formatting on input
+screenplayTextarea.addEventListener('input', () => {
+  const formattedText = screenplayTextarea.value
+    .replace(/<span class="(\w+)">(.*?)<\/span>/g, (match, className, text) => {
+      switch (className) {
+        case 'slug-line':
+          return `<b style="font-size: 14px; color: #660000;">${text.toUpperCase()}</b>`;
+        case 'action':
+          return `<span style="font-size: 12px;">${text}</span>`;
+        case 'character-first-appearance':
+          return `<b>${text.toUpperCase()}</b>`;
+        case 'character':
+          return `<center>${text.toUpperCase()}</center>`;
+        case 'dialogue':
+          return `<center>${text}</center>`;
+        default:
+          return text; // Leave text unchanged if no matching class
+      }
+    });
+  screenplayTextarea.value = formattedText;
+});
+
+// Hide tooltip on input and blur
+screenplayTextarea.addEventListener('input', () => {
+  const tooltip = document.querySelector('#tooltip');
+  tooltip.style.display = 'none'; // Hide the tooltip
+});
+
+screenplayTextarea.addEventListener('blur', () => {
+  const tooltip = document.querySelector('#tooltip');
+  tooltip.style.display = 'none'; // Also hide on blur
+});
+
+
 function updateTooltip(formattedLine) {
-  const tooltip = document.querySelector('#tooltip'); // Assuming a tooltip element
+  const tooltip = document.querySelector('#tooltip');
   const formatClass = formattedLine.match(/class="(\w+)"/)[1];
   tooltip.textContent = formatClass;
   tooltip.style.display = 'block';
 
-  // Position tooltip based on cursor or selection 
-  // ... (implementation for positioning logic)
+  // Position tooltip based on cursor or selection
+  const textareaRect = screenplayTextarea.getBoundingClientRect();
+  const cursorPosition = getCursorPosition(screenplayTextarea);
+  const tooltipWidth = tooltip.offsetWidth;
+  const tooltipHeight = tooltip.offsetHeight;
+
+  // Position below cursor if space, otherwise above
+  let tooltipLeft = textareaRect.left + cursorPosition.left;
+  let tooltipTop = textareaRect.top + cursorPosition.top + cursorPosition.height;
+
+  if (tooltipTop + tooltipHeight > window.innerHeight) {
+    tooltipTop = textareaRect.top + cursorPosition.top - tooltipHeight;
+  }
+
+  // Adjust horizontal position for potential overflow
+  if (tooltipLeft + tooltipWidth > window.innerWidth) {
+    tooltipLeft = window.innerWidth - tooltipWidth;
+  }
+
+  tooltip.style.left = tooltipLeft + 'px';
+  tooltip.style.top = tooltipTop + 'px';
 }
 
-screenplayTextarea.addEventListener('input', () => {
-  const tooltip = document.querySelector('#tooltip');
-  tooltip.style.display = 'none';
-});
-screenplayTextarea.addEventListener('blur', () => {
-  const tooltip = document.querySelector('#tooltip');
-  tooltip.style.display = 'none';
-});
+// Helper function to get accurate cursor position
+function getCursorPosition(element) {
+  const rect = element.getBoundingClientRect();
+  const position = {
+    left: element.selectionStart,
+    top: rect.top,
+    height: rect.height,
+  };
+
+  // Adjust for potential scroll position
+  position.left -= element.scrollLeft;
+  position.top -= element.scrollTop;
+
+  return position;
+}
 
 
 // Toggle formatting on Command + Enter
